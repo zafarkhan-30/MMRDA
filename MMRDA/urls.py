@@ -14,15 +14,16 @@ schema_view = get_schema_view(
       title="MMRDA API",
       default_version='v1',
       description="description of MMRDA project",
-    
    ),
    public=True,
    permission_classes=[permissions.AllowAny],
 )
 
-
 urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('admin/', admin.site.urls),
-    path('api/' ,include('Auth.urls') )
+    path('api/auth/' ,include('Auth.urls') ),
+    path('api/envmonitoring/' , include('EnvMonitoring.urls')),
+    path('api/socialmonitoring/' , include('SocialMonitoring.urls')),
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

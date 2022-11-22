@@ -50,9 +50,12 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'Auth',
+    'EnvMonitoring',
+    'SocialMonitoring',
     "corsheaders",
     'rest_framework_simplejwt',
     'django.contrib.gis',
+    'rest_framework_gis'
     
 ]
 
