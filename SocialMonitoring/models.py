@@ -7,6 +7,7 @@ from django.utils import timezone
 # Create your models here.
 # ----------------------------------SOCIAL MONITORING MODLES----------------------------------------
 
+
 class Baseclass(models.Model):
     choices = [('JAN-MAR 2022', 'JAN-MAR 2022'), ('APR-JUN 2022',
                                                   'APR-JUN 2022'), ('JULY-AUG 2022', 'JULY-AUG 2022')]
@@ -36,13 +37,16 @@ class social_Monitoring(models.Model):
 def create_data(sender, instance, **kwargs):
     if kwargs['created']:
         created = social_Monitoring.objects.create(sm_id=instance)
+
+
 post_save.connect(create_data, sender=User)
 
 
 class PAP(Baseclass):
     pap_id = models.ForeignKey(
         social_Monitoring, related_name='PAPs', on_delete=models.CASCADE)
-    date_of_notification =models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    date_of_notification = models.DateTimeField(
+        auto_now_add=True, null=True, blank=True)
     actions = [('Agreed for rehabilation', 'Agreed for rehabilation'),
                ('Agreed For Compensation', 'Agreed For Compensation'),
                ('Not agreed', 'Not agreed')]
@@ -54,10 +58,8 @@ class PAP(Baseclass):
         max_length=255, choices=Compensation_offered_type, null=True, blank=True)
     eligibility_status = models.BooleanField()
     type_of_pap = [
-        ('individual', 'individual'),
-        ('commercial', 'commercial'),
-        ('land', 'land'),
-        ('Institutional', 'Institutional'),
+        ('individual', 'individual'), ('commercial', 'commercial'),
+        ('land', 'land'), ('Institutional', 'Institutional'),
         ('other', 'other')]
     category_of_PAP = models.CharField(
         max_length=255, choices=type_of_pap, null=True, blank=True)
@@ -76,17 +78,15 @@ class PAP(Baseclass):
         return self.pap_id.sm_id.email
 
  # Agreed For rehabilation
-
-
 class Rehabilation(models.Model):
     rehabilation_id = models.OneToOneField(
-        PAP,related_name= 'rehabilation' , on_delete=models.CASCADE)
-    shifting_allowance = models.BooleanField()
+        PAP, related_name='rehabilation', on_delete=models.CASCADE)
+    shifting_allowance = models.BooleanField(blank =True)
     livelihood_support = models.CharField(
         max_length=255, null=True, blank=True)
-    traning = models.BooleanField()
-    tenaments = models.BooleanField()
-    transport_allowance = models.BooleanField()
+    traning = models.BooleanField(blank= True )
+    tenaments = models.BooleanField(blank =True)
+    transport_allowance = models.BooleanField(blank =True)
     additional_financial_support_or_revolving_fund = models.BooleanField()
     Community_engagement = models.CharField(
         max_length=255, null=True, blank=True)
@@ -116,7 +116,8 @@ class Compensation(models.Model):
 class LabourCamp(Baseclass):
     camp_id = models.ForeignKey(
         social_Monitoring, related_name='labour_camp', on_delete=models.CASCADE)
-    transport_facility = models.BooleanField()
+    # transport_facility = models.BooleanField(blank=True)
+
 
 def create_data(sender, instance, **kwargs):
     if kwargs['created']:
@@ -128,37 +129,26 @@ class ConstructionSiteDetails(Baseclass):
     construction_id = models.ForeignKey(
         LabourCamp, related_name='constructioncamp', on_delete=models.CASCADE)
     site_photographs = models.ImageField(null=True, blank=True)
-    demarking_of_pathways = models.BooleanField()
-    signAges_or_labeling = models.BooleanField()
-    # medical_choices = [('Regular Health Checkup', 'Regular Health Checkup'),
-    #                    ('Availability Of Doctor', 'Availability Of Doctor'),
-    #                    ('Availability Of First aid Kit', 'Availability Of Firstaid Kit')]
-    # Medical_facility = models.CharField(
-    #     max_length=255, choices=medical_choices)
+    demarking_of_pathways = models.BooleanField(blank = True)
+    signAges_or_labeling = models.BooleanField(blank= True )
     Regular_Health_Checkup = models.BooleanField(default=False)
     Availability_Of_Doctor = models.BooleanField(default=False)
     Availability_Of_First_aid_Kit = models.BooleanField(default=False)
-    Drinking_water = models.BooleanField()
-    Toilet_facility = models.BooleanField()
+    Drinking_water = models.BooleanField(blank =True)
+    Toilet_facility = models.BooleanField( blank =True)
 
 
 class LabourCampDetails(Baseclass):
     labourcamp_id = models.ForeignKey(
-        LabourCamp, related_name='labourcampdetails', on_delete=models.CASCADE)
-    toilets = models.BooleanField()
-    Drinking_water = models.BooleanField()
-    demarking_of_pathways = models.BooleanField()
-    signAges_or_labeling = models.BooleanField()
-    # medical_choices = [('Regular Health Checkup', 'Regular Health Checkup'),
-    #                    ('Availability Of Doctor', 'Availability Of Doctor'),
-    #                    ('Availability Of First aid Kit', 'Availability Of Firstaid Kit')]
-    # Medical_facility = models.CharField(
-    #     max_length=255, choices=medical_choices, null=True, blank=True)
-    Regular_Health_Checkup = models.BooleanField(default=False)
-    Availability_Of_Doctor = models.BooleanField(default=False)
-    Availability_Of_First_aid_Kit = models.BooleanField(default=False)
-
-    kitchen_area = models.BooleanField()
-    fire_execution = models.BooleanField()
-    segregation_of_waste = models.BooleanField()
+        LabourCamp, related_name='labourcampdetails', on_delete=models.CASCADE )
+    toilets = models.BooleanField(blank =True)
+    Drinking_water = models.BooleanField(blank =True)
+    demarking_of_pathways = models.BooleanField(blank =True)
+    signAges_or_labeling = models.BooleanField(blank =True)
+    Regular_Health_Checkup = models.BooleanField(blank= True )
+    Availability_Of_Doctor = models.BooleanField(   blank =True)
+    Availability_Of_First_aid_Kit = models.BooleanField( blank =True)
+    kitchen_area = models.BooleanField(blank =True)
+    fire_execution = models.BooleanField(blank =True)
+    segregation_of_waste = models.BooleanField(blank =True)
     rooms_or_doms = models.CharField(max_length=255, null=True, blank=True)

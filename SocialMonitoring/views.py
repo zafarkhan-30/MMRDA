@@ -1,20 +1,19 @@
-from django.shortcuts import render
 from .serializers import (PapSerailzer , papviewserialzer , rehabilatinSerializer , Compensationserializer ,
-ConstructionSiteDetailsViewSerializer, constructionSiteSerializer , LabourCampDetailSerializer ,
-LabourCampDetailViewSerializer) 
+ConstructionSiteDetailsViewSerializer, constructionSiteSerializer , LabourCampDetailSerializer,LabourCampDetailViewSerializer) 
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated  , DjangoModelPermissions
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from .renderers import ErrorRenderer
 from django.contrib.gis.geos import Point,GEOSGeometry
-# Create your views here.
+from .models import LabourCampDetails
+from .permissions import IsMMRDA
 
 
 class PapView(generics.GenericAPIView):
     renderer_classes = [ErrorRenderer]
     serializer_class = PapSerailzer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated , IsMMRDA]
     parser_classes= [MultiPartParser]
 
     def post(self , request):
@@ -88,21 +87,23 @@ class constructionSiteView(generics.GenericAPIView):
 class LabourCampDetailsView(generics.GenericAPIView):
     renderer_classes = [ErrorRenderer]
     parser_classes = [MultiPartParser]
-    permission_classes = [IsAuthenticated]
+    permission_classes =[IsAuthenticated , IsMMRDA]
     serializer_class =  LabourCampDetailSerializer
+    queryset = LabourCampDetails.objects.all()
+    
 
     def post(self , request):
-        try:
-            lat=float(request.data['latitude'])
-            long=float(request.data['longitude'])
-            location=Point(long,lat,srid=4326)
-            serializer = LabourCampDetailSerializer(data = request.data)
-            if serializer.is_valid(raise_exception= True):
-                LabourCampDetails= serializer.save(location = location)
-                data = LabourCampDetailViewSerializer(LabourCampDetails).data 
-                return Response(data , status = 200)
-        except:
-            return Response({"msg": "Please Enter a valid data"} , status = 400)
+        lat=float(request.data['latitude'])
+        long=float(request.data['longitude'])
+        location=Point(long,lat,srid=4326)
+        serializer = LabourCampDetailSerializer(data = request.data)
+        if serializer.is_valid(raise_exception= True):
+            LabourCampDetails= serializer.save(location = location)
+            data = LabourCampDetailViewSerializer(LabourCampDetails).data 
+            return Response(data , status = 200)
+        else:
+            return Response(serializer.errors , status = 400)
+
 
 
 

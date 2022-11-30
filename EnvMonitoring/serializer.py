@@ -1,5 +1,5 @@
 
-from rest_framework import serializers
+from rest_framework import serializers 
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from .models import (User , Air , Noise , water ,EnvMonitoring , 
 EnvQualityMonitoring , TreeManagment , WasteTreatments , MaterialSourcing ,)
@@ -16,6 +16,24 @@ class AirSerializer(serializers.ModelSerializer):
         data.pop('longitude')
         return Air.objects.create(**data)
 
+    def validate(self, data):
+        if data['quarter']=="" or data['quarter']==None:
+            raise serializers.ValidationError("quarter cannot be empty!!")
+        if data['package'] == "" or data['package'] == None:
+            raise serializers.ValidationError('package cannot be empty!!')
+        if data['longitude'] == "" or data['longitude'] == None:
+            raise serializers.ValidationError('longitude cannot be empty!!')
+        if data['latitude'] == "" or data['latitude'] == None:
+            raise serializers.ValidationError('latitude cannot be empty!!')
+        if data['air_id'] == "" or data['air_id'] == None:
+            raise serializers.ValidationError( 'air_id cannot be empty!!')
+        if data['standard'] == "" or data['standard'] == None: 
+            raise serializers.ValidationError( 'standard cannot be empty!!')
+        if data['deviation'] == "" or data['deviation'] == None:
+            raise serializers.ValidationError( 'deviation cannot be empty!!')
+        if data ['trends'] == "" or data['trends'] == None:
+            raise serializers.ValidationError('Trends cannot be empty!!')
+        return data
 class AirViewSerializer(GeoFeatureModelSerializer):
     class Meta:
         model=Air
@@ -33,6 +51,24 @@ class WaterSerializer(serializers.ModelSerializer):
         data.pop('latitude')
         data.pop('longitude')
         return water.objects.create(**data)
+
+    def validate(self,data):
+        if data['quarter']=="" or data['quarter']==None:
+            raise serializers.ValidationError("quarter cannot be empty!!")
+        if data['package'] == "" or data['package'] == None:
+            raise serializers.ValidationError('package cannot be empty!!')
+        if data['longitude'] == "" or data['longitude'] == None:
+            raise serializers.ValidationError('longitude cannot be empty!!')
+        if data['latitude'] == "" or data['latitude'] == None:
+            raise serializers.ValidationError('latitude cannot be empty!!')
+        if data['water_id'] == "" or data['water_id'] == None:
+            raise serializers.ValidationError('water_id cannot be empty!!')
+        if data['quality_of_water'] == "" or data['quality_of_water'] == None:
+            raise serializers.ValidationError('quality_of_water cannot be empty!!')
+        if data['source_of_water'] == "" or data['source_of_water'] == None:
+            raise serializers.ValidationError('source_of_water cannot be empty!!')
+        return data
+        
 
 class waterviewserializer(GeoFeatureModelSerializer):
     class Meta:
@@ -53,6 +89,23 @@ class NoiseSerializer(serializers.ModelSerializer):
         data.pop('longitude')
         return Noise.objects.create(**data)
 
+    def validate(self,data):
+        if data['quarter']=="" or data['quarter']==None:
+            raise serializers.ValidationError("quarter cannot be empty!!")
+        if data['package'] == "" or data['package'] == None:
+            raise serializers.ValidationError('package cannot be empty!!')
+        if data['longitude'] == "" or data['longitude'] == None:
+            raise serializers.ValidationError('longitude cannot be empty!!')
+        if data['latitude'] == "" or data['latitude'] == None:
+            raise serializers.ValidationError('latitude cannot be empty!!')
+        if data ['noise_id'] == "" or data['noise_id'] == None:
+            raise serializers.ValidationError('noise_id cannot be empty!!')
+        if data['noise_level'] == "" or data['noise_level'] == None:
+            raise serializers.ValidationError('noise_level cannot be empty!!')
+        if data['Monitoring_Period'] == "" or data['Monitoring_Period'] == None:
+            raise serializers.ValidationError('Monitoring_Period cannot be empty!!')
+        return data
+
 class Noiseviewserializer(GeoFeatureModelSerializer):
     class Meta:
         model = Noise
@@ -71,12 +124,12 @@ class EnvQualityMonitoringSerializer(serializers.ModelSerializer):
         
 class envMonitoringSerailzer(serializers.ModelSerializer):
     # Env = EnvQualityMonitoringSerializer( read_only = True) 
-    air = AirSerializer(read_only = True )
-    noise = NoiseSerializer(read_only = True)
-    water = WaterSerializer(read_only = True)
+    # air = AirSerializer(read_only = True )
+    # noise = NoiseSerializer(read_only = True)
+    # water = WaterSerializer(read_only = True)
     class Meta:
-        model = EnvQualityMonitoring
-        fields = ['eqm_id' , 'noise' , 'water','air']
+        model = EnvMonitoring
+        fields ='__all__'
 
         
 class TreeManagementSerailizer(serializers.ModelSerializer):
@@ -91,6 +144,35 @@ class TreeManagementSerailizer(serializers.ModelSerializer):
         data.pop('latitude')
         data.pop('longitude')
         return TreeManagment.objects.create(**data)
+    
+    def validate(self,data):
+        if data['quarter']=="" or data['quarter']==None:
+            raise serializers.ValidationError("quarter cannot be empty!!")
+        if data['package'] == "" or data['package'] == None:
+            raise serializers.ValidationError('package cannot be empty!!')
+        if data['longitude'] == "" or data['longitude'] == None:
+            raise serializers.ValidationError('longitude cannot be empty!!')
+        if data['latitude'] == "" or data['latitude'] == None:
+            raise serializers.ValidationError('latitude cannot be empty!!')
+        if data['tree_id'] == "" or data['tree_id'] == None:
+            raise serializers.ValidationError('tree_id cannot be empty!!')
+        if data['planted'] == "" or data['planted'] == None:
+            raise serializers.ValidationError('planted cannot be empty!!')
+        # if data['planted_details'] == "" or data['planted_details'] == None:
+        #     raise serializers.ValidationError('planted_details cannot be empty!!')
+        # if data['No_of_trees_cut'] == "" or data['No_of_trees_cut'] == None:
+        #     raise serializers.ValidationError('No_of_trees_cut cannot be empty!!')
+        # if data['Cutting_details'] == "" or data['Cutting_details'] == None:
+        #     raise serializers.ValidationError('Cutting_details cannot be empty!!')
+        if data['transplanted'] == "" or data['transplanted'] == None:
+            raise serializers.ValidationError('transplanted cannot be empty!!')
+        # if data['transplanted_details'] == "" or data['transplanted_details'] == None:
+        #     raise serializers.ValidationError('transplanted_details cannot be empty!!')
+        # if data['Management'] == "" or data['Management'] == None:
+        #     raise serializers.ValidationError('Management cannot be empty!!')
+        
+        return data
+        
 
 
 class TreeManagmentviewserializer(GeoFeatureModelSerializer):
@@ -112,6 +194,34 @@ class WasteTreatmentsSerializer(serializers.ModelSerializer):
         data.pop('latitude')
         return WasteTreatments.objects.create(**data)
 
+    def validate(self,data):
+        if data['quarter']=="" or data['quarter']==None:
+            raise serializers.ValidationError("quarter cannot be empty!!")
+        if data['package'] == "" or data['package'] == None:
+            raise serializers.ValidationError('package cannot be empty!!')
+        if data['longitude'] == "" or data['longitude'] == None:
+            raise serializers.ValidationError('longitude cannot be empty!!')
+        if data['latitude'] == "" or data['latitude'] == None:
+            raise serializers.ValidationError('latitude cannot be empty!!')
+        if data['waste_id'] == "" or data['waste_id'] == None:
+            raise serializers.ValidationError('waste_id cannot be empty!!')
+        if data['waste_type'] == "" or data['waste_type'] == None:
+            raise serializers.ValidationError('waste_type cannot be empty!!')
+        if data ['quantity'] == "" or data['quantity'] == None:
+            raise serializers.ValidationError('quantity cannot be empty!!')
+        if data['waste_handled'] == "" or data['waste_handled'] == None:
+            raise serializers.ValidationError('waste_handled cannot be empty!!')
+        # if data['waste_handled_details'] == "" or data['waste_handled_details'] == None:
+        #     raise serializers.ValidationError('waste_handled_details cannot be empty!!')
+        # if data['photographs'] == "" or data['photographs'] == None:
+        #     raise serializers.ValidationError('photographs cannot be empty!!')
+        # if data['documents'] == "" or data['documents'] == None:
+        #     raise serializers.ValidationError('documents cannot be empty!!')
+        # if data['remarks'] == "" or data['remarks'] == None:
+        #     raise serializers.ValidationError('remarks cannot be empty!!')
+        
+        return data
+
 class wastetreatmentsViewserializer(GeoFeatureModelSerializer):
     class Meta: 
         model = WasteTreatments
@@ -127,10 +237,29 @@ class MaterialSourcingSerializer(serializers.ModelSerializer):
         model = MaterialSourcing
         fields = ('quarter','package','longitude','latitude' ,'materialsourcing_id','approvals','source_of_quary')
 
+    def validate(self,data):
+        if data['quarter']=="" or data['quarter']==None:
+            raise serializers.ValidationError("quarter cannot be empty!!")
+        if data['package'] == "" or data['package'] == None:
+            raise serializers.ValidationError('package cannot be empty!!')
+        if data['longitude'] == "" or data['longitude'] == None:
+            raise serializers.ValidationError('longitude cannot be empty!!')
+        if data['latitude'] == "" or data['latitude'] == None:
+            raise serializers.ValidationError('latitude cannot be empty!!')
+        if data['materialsourcing_id'] == "" or data['materialsourcing_id'] == None:
+            raise serializers.ValidationError('materialsourcing_id cannot be empty!!')
+        if data['source_of_quary'] == "" or data['source_of_quary'] == None:
+            raise serializers.ValidationError('source_of_quary cannot be empty!!')
+        
+        return data
+
+
     def create(self,data):
         data.pop('longitude')
         data.pop('latitude')
         return MaterialSourcing.objects.create(**data)
+
+    
 
 class MaterialSourcingViewserializer(GeoFeatureModelSerializer):
     class Meta:

@@ -41,6 +41,7 @@ AUTH_USER_MODEL = 'Auth.User'
 # Application definition
 
 INSTALLED_APPS = [
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -49,7 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'drf_yasg',
     'rest_framework',
-    'Auth',
+    'Auth.apps.AuthConfig',
     'EnvMonitoring',
     'SocialMonitoring',
     "corsheaders",
@@ -103,7 +104,7 @@ WSGI_APPLICATION = 'MMRDA.wsgi.application'
 DATABASES={
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME':'mmrda',
+        'NAME':'demo_mmrda',
         'USER':'postgres',
         'PASSWORD':'admin',
         'HOST':'localhost',
@@ -111,6 +112,12 @@ DATABASES={
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -156,6 +163,11 @@ MEDIA_URL = "/media/"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTHENTICATION_BACKENDS = [
+  
+    "django.contrib.auth.backends.ModelBackend",
+ 
+]
 
 REST_FRAMEWORK = {
 
@@ -163,6 +175,10 @@ REST_FRAMEWORK = {
 
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     "rest_framework.permissions.DjangoModelPermissions",
+    # )
 }
 
 

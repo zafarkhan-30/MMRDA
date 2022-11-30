@@ -1,6 +1,5 @@
-from tkinter.ttk import Style
 from rest_framework import serializers
-from .models import (User  , photographs , occupationalHealthSafety ,  traning )
+from .models import (User  ,)
 from django.contrib.auth import authenticate
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
@@ -10,11 +9,17 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('email', 'password','is_mmrda' , 'is_kfw' , 'is_contractor' , 'is_consultant')
-        
-    
+
 
     def create(self,validated_data):
         return User.objects.create_user(**validated_data)
+
+
+
+class UserViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=User
+        fields="__all__"
 
 
 class LoginSerializer(serializers.ModelSerializer):
@@ -30,29 +35,22 @@ class LoginSerializer(serializers.ModelSerializer):
        return authenticate(**data)
        
 
+# class OccupationalHealthSafetySerailzers(serializers.ModelSerializer):
+#     class Meta:
+#         model = occupationalHealthSafety
+#         fields = "__all__" 
 
 
+# class TraningSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = traning
+#         fields = '__all__'
 
 
-class OccupationalHealthSafetySerailzers(serializers.ModelSerializer):
-    class Meta:
-        model = occupationalHealthSafety
-        fields = "__all__" 
-
-
-
-
-class TraningSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = traning
-        fields = '__all__'
-
-
-
-class photographsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = photographs
-        fields = '__all__'
+# class photographsSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = photographs
+#         fields = '__all__'
         
 
 
