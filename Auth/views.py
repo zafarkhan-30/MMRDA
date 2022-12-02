@@ -68,7 +68,7 @@ class LoginView(generics.GenericAPIView):
                 user = RegisterSerializer(user_data).data
                 if serializer is not None:
                     token = get_tokens_for_user(serializer.validated_data)
-                    return Response({'Token': token, 'msg': 'Login sucessfull', 'user': user_data.email ,
+                    return Response({'Token': token, 'msg': 'Login sucessfull', 'user_id' : user_data.id,'user': user_data.email ,
                                     'user_group' : user_data.groups.values_list("name",flat=True)[0]}, status=200)
             except:
                 return Response({'msg' : 'Check Your email and password',
@@ -104,36 +104,7 @@ class LoginView(generics.GenericAPIView):
 #             return Response({'msg' : 'Please Enter Valid data'} , status = 400)
 
 
-# # class TraningView(generics.GenericAPIView):
-#     serializer_class = TraningSerializer
-#     renderer_classes = [ErrorRenderer]
-#     permission_classes = [IsAuthenticated]
-#     parser_classes = [MultiPartParser]
 
-#     def post(self , request):
-#         try:
-#             serializer = TraningSerializer(data = request.data )
-#             if serializer.is_valid(raise_exception= True):
-#                 serializer.save()
-#                 return Response(serializer.data , status = 200)
-#         except:
-#             return Response({'Please Enetr a valid data'} , status =400)
-    
-
-
-# # class PhotographsView(generics.GenericAPIView):
-#     serializer_class = photographsSerializer
-#     renderer_classes = [ErrorRenderer]
-#     permission_classes = [IsAuthenticated]
-#     parser_classes =[MultiPartParser]
-
-#     def post(self, request):
-#         serializer = photographsSerializer(data = request.data )
-#         if serializer.is_valid(raise_exception = True):
-#             serializer.save()
-#             return Response(serializer.data , status = 200)
-#         else:
-#             return Response(serializer.errors , status = 400)
         
 
    

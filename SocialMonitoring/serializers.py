@@ -96,8 +96,8 @@ class Compensationserializer(serializers.ModelSerializer):
         def validate(self , data):
             if data['Compensation_id'] == "" or data['Compensation_id'] == None:
                 raise serializers.ValidationError('Compensation_id cannot be empty!!')
-            if data['Alternate_accommodation_or_Commercial_Unit'] == "" or data['Alternate_accommodation_or_Commercial_Unit'] == None:
-                raise serializers.ValidationError('Alternate_accommodation_or_Commercial_Unit cannot be empty!!')
+            # if data['Alternate_accommodation_or_Commercial_Unit'] == "" or data['Alternate_accommodation_or_Commercial_Unit'] == None:
+            #     raise serializers.ValidationError('Alternate_accommodation_or_Commercial_Unit cannot be empty!!')
             if data['cash_compensation'] == "" or data['cash_compensation'] == None:
                 raise serializers.ValidationError('cash_compensation cannot be empty!!')
             if data['land_provided_area'] == "" or data['land_provided_area'] == None:

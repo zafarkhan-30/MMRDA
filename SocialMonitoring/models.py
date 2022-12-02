@@ -3,10 +3,9 @@ from Auth.models import User
 from django.db.models.signals import post_save
 from django.contrib.gis.db import models
 from django.utils import timezone
-
 # Create your models here.
-# ----------------------------------SOCIAL MONITORING MODLES----------------------------------------
 
+# ----------------------------------SOCIAL MONITORING MODLES----------------------------------------
 
 class Baseclass(models.Model):
     choices = [('JAN-MAR 2022', 'JAN-MAR 2022'), ('APR-JUN 2022',
@@ -37,8 +36,6 @@ class social_Monitoring(models.Model):
 def create_data(sender, instance, **kwargs):
     if kwargs['created']:
         created = social_Monitoring.objects.create(sm_id=instance)
-
-
 post_save.connect(create_data, sender=User)
 
 
@@ -112,11 +109,13 @@ class Compensation(models.Model):
 
 # Labour  Camp Model ----------------------------------------------
 
-
 class LabourCamp(Baseclass):
     camp_id = models.ForeignKey(
         social_Monitoring, related_name='labour_camp', on_delete=models.CASCADE)
     # transport_facility = models.BooleanField(blank=True)
+
+    def __str__(self):
+        return self.camp_id.sm_id.email
 
 
 def create_data(sender, instance, **kwargs):
@@ -137,6 +136,9 @@ class ConstructionSiteDetails(Baseclass):
     Drinking_water = models.BooleanField(blank =True)
     Toilet_facility = models.BooleanField( blank =True)
 
+    def __str__(self):
+        return self.construction_id.camp_id.sm_id.email
+
 
 class LabourCampDetails(Baseclass):
     labourcamp_id = models.ForeignKey(
@@ -152,3 +154,6 @@ class LabourCampDetails(Baseclass):
     fire_execution = models.BooleanField(blank =True)
     segregation_of_waste = models.BooleanField(blank =True)
     rooms_or_doms = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return self.labourcamp_id.camp_id.sm_id.email

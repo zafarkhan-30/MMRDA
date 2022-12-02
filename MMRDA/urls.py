@@ -25,5 +25,6 @@ urlpatterns = [
     path('api/auth/' ,include('Auth.urls') ),
     path('api/envmonitoring/' , include('EnvMonitoring.urls')),
     path('api/socialmonitoring/' , include('SocialMonitoring.urls')),
+    path('api/traning/' , include('Training.urls')),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

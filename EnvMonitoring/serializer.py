@@ -1,4 +1,3 @@
-
 from rest_framework import serializers 
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from .models import (User , Air , Noise , water ,EnvMonitoring , 
@@ -158,18 +157,9 @@ class TreeManagementSerailizer(serializers.ModelSerializer):
             raise serializers.ValidationError('tree_id cannot be empty!!')
         if data['planted'] == "" or data['planted'] == None:
             raise serializers.ValidationError('planted cannot be empty!!')
-        # if data['planted_details'] == "" or data['planted_details'] == None:
-        #     raise serializers.ValidationError('planted_details cannot be empty!!')
-        # if data['No_of_trees_cut'] == "" or data['No_of_trees_cut'] == None:
-        #     raise serializers.ValidationError('No_of_trees_cut cannot be empty!!')
-        # if data['Cutting_details'] == "" or data['Cutting_details'] == None:
-        #     raise serializers.ValidationError('Cutting_details cannot be empty!!')
+        
         if data['transplanted'] == "" or data['transplanted'] == None:
             raise serializers.ValidationError('transplanted cannot be empty!!')
-        # if data['transplanted_details'] == "" or data['transplanted_details'] == None:
-        #     raise serializers.ValidationError('transplanted_details cannot be empty!!')
-        # if data['Management'] == "" or data['Management'] == None:
-        #     raise serializers.ValidationError('Management cannot be empty!!')
         
         return data
         
@@ -211,14 +201,7 @@ class WasteTreatmentsSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('quantity cannot be empty!!')
         if data['waste_handled'] == "" or data['waste_handled'] == None:
             raise serializers.ValidationError('waste_handled cannot be empty!!')
-        # if data['waste_handled_details'] == "" or data['waste_handled_details'] == None:
-        #     raise serializers.ValidationError('waste_handled_details cannot be empty!!')
-        # if data['photographs'] == "" or data['photographs'] == None:
-        #     raise serializers.ValidationError('photographs cannot be empty!!')
-        # if data['documents'] == "" or data['documents'] == None:
-        #     raise serializers.ValidationError('documents cannot be empty!!')
-        # if data['remarks'] == "" or data['remarks'] == None:
-        #     raise serializers.ValidationError('remarks cannot be empty!!')
+    
         
         return data
 

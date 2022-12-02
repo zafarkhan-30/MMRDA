@@ -11,8 +11,6 @@ urlpatterns = [
     
     # path('healthsafety' , OccupationalHealthSafetyView.as_view() , name = 'Health & safety'),
 
-    # path('traning' , TraningView.as_view() , name = 'traning'),
     
-    # path('photographs' , PhotographsView.as_view() , name = 'photographs')
 
 ]
