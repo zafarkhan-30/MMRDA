@@ -21,8 +21,8 @@ def _has_group_permission(user, required_group):
     return any([_is_in_group(user, group_name) for group_name in required_group])
 
 
-class IsMMRDA(BasePermission):
-    required_group = ["mmrda"]
+class IsConsultant(BasePermission):
+    required_group = ["consultant"]
 
     def has_permission(self, request, view):
         has_group_permission = _has_group_permission(

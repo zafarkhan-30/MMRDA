@@ -94,7 +94,7 @@ WSGI_APPLICATION = 'MMRDA.wsgi.application'
 DATABASES={
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME':'demo_mmrda',
+        'NAME':'mmrda',
         'USER':'postgres',
         'PASSWORD':'admin',
         'HOST':'localhost',
@@ -151,7 +151,7 @@ MEDIA_URL = "/media/"
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # AUTHENTICATION_BACKENDS = [
   
@@ -184,7 +184,6 @@ SWAGGER_SETTINGS = {
     },
     
 }
-
 
 
 SIMPLE_JWT = {

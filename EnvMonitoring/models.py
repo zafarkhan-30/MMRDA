@@ -5,27 +5,27 @@ from django.contrib.gis.db import models
 # Create your models here.
 
 
-class EnvMonitoring(models.Model):
-    env_monitoring = models.ForeignKey(
-        User, related_name="Quality_Monitoring", on_delete=models.CASCADE , null=True   , blank=True)
-    choices = [('CA-07', 'CA-07'), ('CA-10', 'CA-10'), ('CA-09', 'CA-09')]
-    package = models.CharField(
-        max_length=255, choices=choices, null=True, blank=True)
+# class EnvMonitoring(models.Model):
+#     env_monitoring = models.ForeignKey(
+#         User, related_name="Quality_Monitoring", on_delete=models.CASCADE , null=True   , blank=True)
+#     choices = [('CA-07', 'CA-07'), ('CA-10', 'CA-10'), ('CA-09', 'CA-09')]
+#     package = models.CharField(
+#         max_length=255, choices=choices, null=True, blank=True)
 
-    def __str__(self) -> str:
-        return self.env_monitoring.email
+#     def __str__(self) -> str:
+#         return self.env_monitoring.email
 
 
-class EnvQualityMonitoring(models.Model):
-    eqm_id = models.OneToOneField(
-        EnvMonitoring, related_name='EnvQualityMonitoring', on_delete=models.CASCADE , null=True   , blank=True)
+# class EnvQualityMonitoring(models.Model):
+#     eqm_id = models.OneToOneField(
+#         EnvMonitoring, related_name='EnvQualityMonitoring', on_delete=models.CASCADE , null=True   , blank=True)
 
-    def __str__(self) -> str:
-        return self.eqm_id.env_monitoring.email
-def create_data(sender, instance, **kwargs):
-    if kwargs['created']:
-        created = EnvQualityMonitoring.objects.create(eqm_id=instance)
-post_save.connect(create_data, sender=EnvMonitoring)
+#     def __str__(self) -> str:
+#         return self.eqm_id.env_monitoring.email
+# def create_data(sender, instance, **kwargs):
+#     if kwargs['created']:
+#         created = EnvQualityMonitoring.objects.create(eqm_id=instance)
+# post_save.connect(create_data, sender=EnvMonitoring)
 
 
 # Abstarct Baseclass for EnvMonitoring for common field
@@ -48,43 +48,47 @@ class Baseclass(models.Model):
 
 
 class Air(Baseclass):
-    air_id = models.ForeignKey(
-        EnvQualityMonitoring, related_name='airs', on_delete=models.CASCADE , null= True   , blank=True)
+    # air_id = models.ForeignKey(
+    #     EnvQualityMonitoring, related_name='airs', on_delete=models.CASCADE , null= True   , blank=True)
     standard = models.FloatField(max_length=255, null=True, blank=True)
     deviation = models.FloatField(max_length=255, null=True, blank=True)
     trends = models.CharField(max_length=100, blank=True, null=True)
 
-    def __str__(self) -> str:
-        return "filled By :- " + self.air_id.eqm_id.env_monitoring.email
+
 
 
 class water(Baseclass):
-    water_id = models.ForeignKey(
-        EnvQualityMonitoring, related_name='waters', on_delete=models.CASCADE , null= True   , blank=True)
+    # water_id = models.ForeignKey(
+        # EnvQualityMonitoring, related_name='waters', on_delete=models.CASCADE , null= True   , blank=True)
     # Water = [('GroundWater', 'Ground Water'), ('SeaWater', 'Sea Water'), ]
     quality_of_water = models.CharField(max_length=255, null=True, blank=True)
     source_of_water = models.CharField(max_length=255, null=True, blank=True)
 
-    def __str__(self) -> str:
-        return "filled By :- " + self.water_id.eqm_id.env_monitoring.email
+    
 
 
 class Noise(Baseclass):
-    noise_id = models.ForeignKey(
-        EnvQualityMonitoring, related_name="noises", on_delete=models.CASCADE , null =True   , blank=True )
+    # noise_id = models.ForeignKey(
+    #     EnvQualityMonitoring, related_name="noises", on_delete=models.CASCADE , null =True   , blank=True )
     noise_level = models.CharField(max_length=255, null=True, blank=True)
     period = [("1 hour", "1 hour"), ("3 hours", "3 hours"),
               ("6 hours", "6 hours"), ]
     Monitoring_Period = models.CharField(
         max_length=255, choices=period, null=True, blank=True)
 
-    def __str__(self) -> str:
-        return "filled By :- " + self.noise_id.eqm_id.env_monitoring.email
+    # def __str__(self) -> str:
+    #     return "filled By :- " + self.noise_id.eqm_id.env_monitoring.email
 
 
 class TreeManagment(Baseclass):
-    tree_id = models.ForeignKey(
-        EnvMonitoring, related_name='EnvironmentalMonitoring', on_delete=models.CASCADE, null=True, blank=True )
+    # tree_id = models.ForeignKey(
+        # EnvMonitoring, related_name='EnvironmentalMonitoring', on_delete=models.CASCADE, null=True, blank=True )
+    tree_no= models.BigAutoField(primary_key= True , auto_created=True)
+    common_name = models.CharField(max_length=255 , blank=True, null=True)
+    botanical_name = models.CharField(max_length=255 , null= True, blank=True) 
+    condition = models.CharField(max_length=255, null =True, blank=True)
+    survey_date = models.DateField(null = True, blank = True )
+    survey_time = models.TimeField(null = True, blank = True)
     planted = models.BooleanField()
     planted_details = models.CharField(max_length=255, null=True, blank=True)
     No_of_trees_cut = models.IntegerField(null=True, blank=True)
@@ -94,12 +98,12 @@ class TreeManagment(Baseclass):
         max_length=255, null=True, blank=True)
     Management = models.CharField(max_length=255,  null=True, blank=True)
 
-    def str(self):
-        return self.tree_id.env_monitoring.email
+    # def str(self):
+    #     return self.tree_id.env_monitoring.email
 
 class WasteTreatments(Baseclass):
-    waste_id = models.ForeignKey(
-        EnvMonitoring, related_name="waste_treatments", on_delete=models.CASCADE, null=True, blank=True)
+    # waste_id = models.ForeignKey(
+    #     EnvMonitoring, related_name="waste_treatments", on_delete=models.CASCADE, null=True, blank=True)
     _type = [('Hazardous Waste', 'Hazardous'), ('Bio Waste', 'Bio'),
              ('electronic waste', 'Electronic'), ]
     waste_type = models.CharField(max_length=255, choices=_type)
@@ -114,16 +118,14 @@ class WasteTreatments(Baseclass):
     documents = models.FileField(null=True, blank=True)
     remarks = models.CharField(max_length=255, null=True, blank=True)
 
-    def __str__(self) -> str:
-        return self.waste_id.env_monitoring.email
 
 
 class MaterialSourcing(Baseclass):
-    materialsourcing_id = models.ForeignKey(
-        EnvMonitoring, related_name="MaterialSourcing", on_delete=models.CASCADE, null=True, blank=True)
+    # materialsourcing_id = models.ForeignKey(
+    #     EnvMonitoring, related_name="MaterialSourcing", on_delete=models.CASCADE, null=True, blank=True)
     source = [('Mines', 'Mines'), ('Blast', 'Blast')]
     approvals = models.FileField(null=True , blank= True )
     source_of_quary = models.CharField(max_length=255, choices=source)
 
-    def __str__(self) -> str:
-        return self.materialsourcing_id.env_monitoring.email
+    # def __str__(self) -> str:
+    #     return self.materialsourcing_id.env_monitoring.email

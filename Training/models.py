@@ -25,7 +25,7 @@ class traning(models.Model):
     def __str__(self) -> str:
         return self.traning_id.email
 
-# # # ----------------------------- PHOTOGRAPHS MODEL-----------------------------------------
+# #----------------------------- PHOTOGRAPHS MODEL-----------------------------------------
 
 class photographs(models.Model):
     # site_name = models.CharField(max_length=255, null=True, blank=True)
@@ -37,3 +37,10 @@ class photographs(models.Model):
     date = models.DateTimeField( null=True, blank=True)
     site_photographs = models.ImageField(
         upload_to= 'site_photographs/', null=True, blank=True)
+
+
+class Contactus(models.Model):
+    name = models.CharField(max_length=255 , null = True , blank= True) 
+    email = models.EmailField(max_length=255 , verbose_name= 'Email')
+    messsage = models.TextField(max_length= 255 , blank= True , null = True )
+    

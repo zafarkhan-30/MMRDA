@@ -15,7 +15,7 @@ class PapSerailzer(serializers.ModelSerializer):
 
     class Meta:
         model = PAP
-        fields = ('quarter', 'package', 'longitude', 'latitude', 'pap_id', 'date_of_notification',
+        fields = ('quarter', 'package', 'longitude', 'latitude', 'date_of_notification',
                   'action_taken', 'Compensation_offered', 'eligibility_status', 'category_of_PAP',  'Ownership_status', 'legal_status')
 
     def create(self, data):
@@ -32,10 +32,10 @@ class PapSerailzer(serializers.ModelSerializer):
             raise serializers.ValidationError('longitude cannot be empty!!')
         if data['latitude'] == "" or data['latitude'] == None:
             raise serializers.ValidationError('latitude cannot be empty!!')
-        if data['pap_id '] == "" or data['pap_id'] == None:
-            raise serializers.ValidationError('pap_id cannot be empty!!')
-        if data['date_of_notification'] == "" or data['date_of_notification'] == None:
-            raise serializers.ValidationError('date_of_notification cannot be empty!!')
+        # if data['pap_id'] == "" or data['pap_id'] == None:
+        #     raise serializers.ValidationError('pap_id cannot be empty!!')
+        # if data['date_of_notification'] == "" or data['date_of_notification'] == None:
+        #     raise serializers.ValidationError('date_of_notification cannot be empty!!')
         if data['action_taken'] == "" or data['action_taken'] == None:
             raise serializers.ValidationError('action_taken cannot be empty!!')
         if data['Compensation_offered'] == "" or data['Compensation_offered'] == None:
@@ -50,7 +50,13 @@ class PapSerailzer(serializers.ModelSerializer):
             raise serializers.ValidationError('legal_status cannot be empty!!')
         return data
 
-
+class PapUpdateSerialzier(serializers.ModelSerializer):
+    longitude = serializers.CharField(max_length=10, required=False)
+    latitude = serializers.CharField(max_length=10, required=False)
+    class Meta:
+        model = PAP
+        fields = ('quarter', 'package', 'longitude', 'latitude', 'date_of_notification',
+                  'action_taken', 'Compensation_offered', 'eligibility_status', 'category_of_PAP',  'Ownership_status', 'legal_status')
 
 class papviewserialzer(GeoFeatureModelSerializer):
     class Meta:
@@ -64,12 +70,12 @@ class rehabilatinSerializer(serializers.ModelSerializer):
     #     papSerailzer =PapSerailzer( many = True, read_only = True)
     class Meta:
         model = Rehabilation
-        fields = ['rehabilation_id', 'shifting_allowance', 'additional_financial_support_or_revolving_fund',
+        fields = ['shifting_allowance', 'additional_financial_support_or_revolving_fund',
                   'livelihood_support', 'traning', 'tenaments', 'transport_allowance', 'Community_engagement']
 
     def validate(self, data):
-        if data['rehabilation_id']=="" or data['rehabilation_id']==None:
-            raise serializers.ValidationError('rehabilation_id cannot be empty!!')
+        # if data['PAP_id']=="" or data['PAP_id']==None:
+        #     raise serializers.ValidationError('PAP_id cannot be empty!!')
         if data['shifting_allowance'] == "" or data['shifting_allowance'] == None:
             raise serializers.ValidationError('shifting_allowance cannot be empty!!')
         if data['additional_financial_support_or_revolving_fund'] == "" or data['additional_financial_support_or_revolving_fund'] == None:
@@ -90,12 +96,12 @@ class rehabilatinSerializer(serializers.ModelSerializer):
 class Compensationserializer(serializers.ModelSerializer):
     class Meta:
         model = Compensation
-        fields = ('Compensation_id', 'Alternate_accommodation_or_Commercial_Unit',
+        fields = ('PAP_id', 'Alternate_accommodation_or_Commercial_Unit',
                   'cash_compensation', 'land_provided_area')
         
         def validate(self , data):
-            if data['Compensation_id'] == "" or data['Compensation_id'] == None:
-                raise serializers.ValidationError('Compensation_id cannot be empty!!')
+            if data['PAP_id'] == "" or data['PAP_id'] == None:
+                raise serializers.ValidationError('PAP_id cannot be empty!!')
             # if data['Alternate_accommodation_or_Commercial_Unit'] == "" or data['Alternate_accommodation_or_Commercial_Unit'] == None:
             #     raise serializers.ValidationError('Alternate_accommodation_or_Commercial_Unit cannot be empty!!')
             if data['cash_compensation'] == "" or data['cash_compensation'] == None:
@@ -111,7 +117,7 @@ class constructionSiteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ConstructionSiteDetails
-        fields = ('quarter', 'package', 'longitude', 'latitude', 'construction_id',
+        fields = ('quarter', 'package', 'longitude', 'latitude', 'labourCamp_id',
                   'site_photographs', 'signAges_or_labeling', 'Regular_Health_Checkup',
                   'Availability_Of_Doctor', 'Availability_Of_First_aid_Kit', 'Drinking_water', 'Toilet_facility')
     

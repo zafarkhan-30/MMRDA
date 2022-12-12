@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import (EnvMonitoring ,EnvQualityMonitoring , Air , water ,
+from .models import ( Air , water ,
  Noise , TreeManagment , WasteTreatments , MaterialSourcing)
 
 # Register your models here.
-admin.site.register(EnvMonitoring)
-admin.site.register(EnvQualityMonitoring)
+# admin.site.register(EnvMonitoring)
+# admin.site.register(EnvQualityMonitoring)
 admin.site.register(Air)
 admin.site.register(water)
 admin.site.register(Noise)

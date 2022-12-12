@@ -1,14 +1,13 @@
 from rest_framework import serializers 
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
-from .models import (User , Air , Noise , water ,EnvMonitoring , 
-EnvQualityMonitoring , TreeManagment , WasteTreatments , MaterialSourcing ,)
+from .models import (User , Air , Noise , water , TreeManagment , WasteTreatments , MaterialSourcing ,)
 
 class AirSerializer(serializers.ModelSerializer):
     longitude=serializers.CharField(max_length=10,required=False)
     latitude=serializers.CharField(max_length=10,required=False)
     class Meta:
         model = Air
-        fields = ('quarter','package','longitude','latitude','air_id','standard','deviation','trends')
+        fields = ('quarter','package','longitude','latitude','standard','deviation','trends')
         # geo_field='location'
     def create(self,data):
         data.pop('latitude')
@@ -24,8 +23,8 @@ class AirSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('longitude cannot be empty!!')
         if data['latitude'] == "" or data['latitude'] == None:
             raise serializers.ValidationError('latitude cannot be empty!!')
-        if data['air_id'] == "" or data['air_id'] == None:
-            raise serializers.ValidationError( 'air_id cannot be empty!!')
+        # if data['air_id'] == "" or data['air_id'] == None:
+        #     raise serializers.ValidationError( 'air_id cannot be empty!!')
         if data['standard'] == "" or data['standard'] == None: 
             raise serializers.ValidationError( 'standard cannot be empty!!')
         if data['deviation'] == "" or data['deviation'] == None:
@@ -44,7 +43,7 @@ class WaterSerializer(serializers.ModelSerializer):
     latitude=serializers.CharField(max_length=10,required=False)
     class Meta:
         model = water
-        fields = ('quarter','package','longitude','latitude','water_id','quality_of_water' , 'source_of_water')
+        fields = ('quarter','package','longitude','latitude','quality_of_water' , 'source_of_water')
 
     def create(self,data):
         data.pop('latitude')
@@ -60,8 +59,8 @@ class WaterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('longitude cannot be empty!!')
         if data['latitude'] == "" or data['latitude'] == None:
             raise serializers.ValidationError('latitude cannot be empty!!')
-        if data['water_id'] == "" or data['water_id'] == None:
-            raise serializers.ValidationError('water_id cannot be empty!!')
+        # if data['water_id'] == "" or data['water_id'] == None:
+        #     raise serializers.ValidationError('water_id cannot be empty!!')
         if data['quality_of_water'] == "" or data['quality_of_water'] == None:
             raise serializers.ValidationError('quality_of_water cannot be empty!!')
         if data['source_of_water'] == "" or data['source_of_water'] == None:
@@ -81,7 +80,7 @@ class NoiseSerializer(serializers.ModelSerializer):
     latitude=serializers.CharField(max_length=10,required=False)
     class Meta:
         model = Noise
-        fields = ('quarter','package','longitude','latitude' ,'noise_id','noise_level' , 'Monitoring_Period', )
+        fields = ('quarter','package','longitude','latitude' ,'noise_level' , 'Monitoring_Period', )
 
     def create(self,data):
         data.pop('latitude')
@@ -97,8 +96,8 @@ class NoiseSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('longitude cannot be empty!!')
         if data['latitude'] == "" or data['latitude'] == None:
             raise serializers.ValidationError('latitude cannot be empty!!')
-        if data ['noise_id'] == "" or data['noise_id'] == None:
-            raise serializers.ValidationError('noise_id cannot be empty!!')
+        # if data ['noise_id'] == "" or data['noise_id'] == None:
+        #     raise serializers.ValidationError('noise_id cannot be empty!!')
         if data['noise_level'] == "" or data['noise_level'] == None:
             raise serializers.ValidationError('noise_level cannot be empty!!')
         if data['Monitoring_Period'] == "" or data['Monitoring_Period'] == None:
@@ -111,24 +110,24 @@ class Noiseviewserializer(GeoFeatureModelSerializer):
         fields = '__all__'
         geo_field='location'
 
-class EnvQualityMonitoringSerializer(serializers.ModelSerializer):
-    air = AirSerializer(read_only = True )
-    noise = NoiseSerializer(read_only = True)
-    water = WaterSerializer(read_only = True)
-    class Meta:
-        model = EnvQualityMonitoring
-        fields =  [ 'noise' , 'water','air']
+# class EnvQualityMonitoringSerializer(serializers.ModelSerializer):
+#     air = AirSerializer(read_only = True )
+#     noise = NoiseSerializer(read_only = True)
+#     water = WaterSerializer(read_only = True)
+#     class Meta:
+#         model = EnvQualityMonitoring
+#         fields =  [ 'noise' , 'water','air']
         
-        depth = 2
+#         depth = 2
         
-class envMonitoringSerailzer(serializers.ModelSerializer):
-    # Env = EnvQualityMonitoringSerializer( read_only = True) 
-    # air = AirSerializer(read_only = True )
-    # noise = NoiseSerializer(read_only = True)
-    # water = WaterSerializer(read_only = True)
-    class Meta:
-        model = EnvMonitoring
-        fields ='__all__'
+# class envMonitoringSerailzer(serializers.ModelSerializer):
+#     # Env = EnvQualityMonitoringSerializer( read_only = True) 
+#     # air = AirSerializer(read_only = True )
+#     # noise = NoiseSerializer(read_only = True)
+#     # water = WaterSerializer(read_only = True)
+#     class Meta:
+#         model = EnvMonitoring
+#         fields ='__all__'
 
         
 class TreeManagementSerailizer(serializers.ModelSerializer):
@@ -136,7 +135,8 @@ class TreeManagementSerailizer(serializers.ModelSerializer):
     latitude=serializers.CharField(max_length=10,required=False)
     class Meta:
         model = TreeManagment
-        fields = ('quarter','package','longitude','latitude' ,'tree_id' , 'planted' , 'planted_details' , 'No_of_trees_cut',
+        fields = ('quarter','package','longitude','latitude' , 'common_name' ,'botanical_name',
+                    'condition', 'survey_date' , 'survey_time' , 'planted','planted_details' , 'No_of_trees_cut',
                    'Cutting_details' , 'transplanted', 'transplanted_details' ,'Management'  )
         
     def create(self,data):
@@ -153,11 +153,18 @@ class TreeManagementSerailizer(serializers.ModelSerializer):
             raise serializers.ValidationError('longitude cannot be empty!!')
         if data['latitude'] == "" or data['latitude'] == None:
             raise serializers.ValidationError('latitude cannot be empty!!')
-        if data['tree_id'] == "" or data['tree_id'] == None:
-            raise serializers.ValidationError('tree_id cannot be empty!!')
+        if data['common_name'] == "" or data['common_name'] == None:
+            raise serializers.ValidationError('common_name cannot be empty!!')
+        if data['botanical_name'] == "" or data['botanical_name'] == None:
+            raise serializers.ValidationError('botanical_name cannot be empty!!')
+        if data['condition'] == "" or data['condition'] == None:
+            raise serializers.ValidationError('condition cannot be empty!!') 
+        if data['survey_time'] == "" or data['survey_time'] == None:
+            raise serializers.ValidationError('survey_time cannot be empty!!') 
+        if data['survey_date'] == "" or data['survey_date'] == None:
+            raise serializers.ValidationError('survey_date cannot be empty!!')
         if data['planted'] == "" or data['planted'] == None:
             raise serializers.ValidationError('planted cannot be empty!!')
-        
         if data['transplanted'] == "" or data['transplanted'] == None:
             raise serializers.ValidationError('transplanted cannot be empty!!')
         
@@ -176,7 +183,7 @@ class WasteTreatmentsSerializer(serializers.ModelSerializer):
     latitude=serializers.CharField(max_length=10,required=False)
     class Meta:
         model  = WasteTreatments
-        fields = ('quarter','package','longitude','latitude' ,'waste_id' , 'waste_type' ,'quantity',
+        fields = ('quarter','package','longitude','latitude'  , 'waste_type' ,'quantity',
          'waste_handled' , 'waste_handled_details' , 'photographs' , 'documents','remarks')
 
     def create(self,data):
@@ -193,8 +200,8 @@ class WasteTreatmentsSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('longitude cannot be empty!!')
         if data['latitude'] == "" or data['latitude'] == None:
             raise serializers.ValidationError('latitude cannot be empty!!')
-        if data['waste_id'] == "" or data['waste_id'] == None:
-            raise serializers.ValidationError('waste_id cannot be empty!!')
+        # if data['waste_id'] == "" or data['waste_id'] == None:
+        #     raise serializers.ValidationError('waste_id cannot be empty!!')
         if data['waste_type'] == "" or data['waste_type'] == None:
             raise serializers.ValidationError('waste_type cannot be empty!!')
         if data ['quantity'] == "" or data['quantity'] == None:
@@ -218,7 +225,7 @@ class MaterialSourcingSerializer(serializers.ModelSerializer):
     latitude=serializers.CharField(max_length=10,required=False)
     class Meta:
         model = MaterialSourcing
-        fields = ('quarter','package','longitude','latitude' ,'materialsourcing_id','approvals','source_of_quary')
+        fields = ('quarter','package','longitude','latitude' ,'approvals','source_of_quary')
 
     def validate(self,data):
         if data['quarter']=="" or data['quarter']==None:
@@ -229,13 +236,12 @@ class MaterialSourcingSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('longitude cannot be empty!!')
         if data['latitude'] == "" or data['latitude'] == None:
             raise serializers.ValidationError('latitude cannot be empty!!')
-        if data['materialsourcing_id'] == "" or data['materialsourcing_id'] == None:
-            raise serializers.ValidationError('materialsourcing_id cannot be empty!!')
+        # if data['materialsourcing_id'] == "" or data['materialsourcing_id'] == None:
+        #     raise serializers.ValidationError('materialsourcing_id cannot be empty!!')
         if data['source_of_quary'] == "" or data['source_of_quary'] == None:
             raise serializers.ValidationError('source_of_quary cannot be empty!!')
         
         return data
-
 
     def create(self,data):
         data.pop('longitude')
@@ -251,14 +257,14 @@ class MaterialSourcingViewserializer(GeoFeatureModelSerializer):
         geo_field = 'location'
 
         
-class EnvQualityMonitoringSerailzer(serializers.ModelSerializer):
-    # EnvMonitoring = envMonitoringSerailzer(read_only = True)
-    noise = NoiseSerializer(read_only = True )
-    water=WaterSerializer( read_only = True)
-    air = AirSerializer(read_only = True)
+# class EnvQualityMonitoringSerailzer(serializers.ModelSerializer):
+#     # EnvMonitoring = envMonitoringSerailzer(read_only = True)
+#     noise = NoiseSerializer(read_only = True )
+#     water=WaterSerializer( read_only = True)
+#     air = AirSerializer(read_only = True)
 
-    class Meta: 
-        model = EnvQualityMonitoring
-        fields = ['eqm_id' ,'noise' , 'air','water' ]
+#     class Meta: 
+#         model = EnvQualityMonitoring
+#         fields = ['eqm_id' ,'noise' , 'air','water' ]
 
-        depth = 1
+#         depth = 1

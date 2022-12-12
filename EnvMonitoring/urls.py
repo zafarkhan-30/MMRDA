@@ -1,10 +1,10 @@
 
 from django.urls import path
 from .views import ( AirView , AirListView, WaterView , waterListView, NoiseView ,NoiseListView,
-TreeManagementView, TereeManagementView,EnvMonitoringView , envMonitoringView ,WasteTreatmentsView  ,MaterialSourcingView)
+TreeManagementView, TereeManagementView, envMonitoringView ,WasteTreatmentsView  ,MaterialSourcingView)
 
 urlpatterns = [
-path('envmonitoring' , EnvMonitoringView.as_view() , name = 'envmonitoring'),
+# path('envmonitoring' , EnvMonitoringView.as_view() , name = 'envmonitoring'),
     path('air' , AirView.as_view() , name = 'Air Details'),
     path('airList', AirListView.as_view() , name = 'ListAirView'),
 
@@ -19,6 +19,5 @@ path('envmonitoring' , EnvMonitoringView.as_view() , name = 'envmonitoring'),
     path('treeView' , TereeManagementView.as_view() , name = "Tree Management list"),
 
 
-    
     path('waste' , WasteTreatmentsView.as_view() , name = "Waste Management"),
     path('materialsourcing' , MaterialSourcingView.as_view() , name = "Material Sourcing") , ]

@@ -1,7 +1,6 @@
 
 from .serializer import ( AirSerializer ,WaterSerializer,NoiseSerializer , TreeManagmentviewserializer,
-TreeManagementSerailizer,EnvQualityMonitoringSerializer,EnvQualityMonitoringSerailzer, Noiseviewserializer,
-envMonitoringSerailzer, EnvMonitoring , WasteTreatmentsSerializer , MaterialSourcingSerializer ,AirViewSerializer,
+TreeManagementSerailizer, Noiseviewserializer, WasteTreatmentsSerializer , MaterialSourcingSerializer ,AirViewSerializer,
 waterviewserializer , wastetreatmentsViewserializer , MaterialSourcingViewserializer)
 from rest_framework.response import Response
 from .models import Air , TreeManagment , water , Noise
@@ -12,27 +11,28 @@ from rest_framework import status
 from django.contrib.gis.geos import Point,GEOSGeometry
 from rest_framework.permissions import IsAuthenticated  , DjangoModelPermissions
 from .paginations import LimitsetPagination
-from rest_framework.permissions import AllowAny
+from Auth.permissions import IsConsultant , IsMMRDA
 
-class EnvMonitoringView(generics.GenericAPIView):
-    renderer_classes = [ErrorRenderer]
-    serializer_class = envMonitoringSerailzer
-    parser_classes = [MultiPartParser]
-    permission_classes = [IsAuthenticated]
+
+# class EnvMonitoringView(generics.GenericAPIView):
+#     renderer_classes = [ErrorRenderer]
+#     serializer_class = envMonitoringSerailzer
+#     parser_classes = [MultiPartParser]
+#     permission_classes = [IsAuthenticated]
     
-    def post(self, request):
-        serializer = envMonitoringSerailzer(data = request.data)
-        if serializer.is_valid(raise_exception= True):
-            serializer.save()
-            return Response(serializer.data , status = 200)
-        else:
-            return Response({'msg' :'Please enter valid data'} , status = 400 )
+#     def post(self, request):
+#         serializer = envMonitoringSerailzer(data = request.data)
+#         if serializer.is_valid(raise_exception= True):
+#             serializer.save()
+#             return Response(serializer.data , status = 200)
+#         else:
+#             return Response({'msg' :'Please enter valid data'} , status = 400 )
 
 class AirView(generics.GenericAPIView):
     renderer_classes = [ErrorRenderer]
     serializer_class = AirSerializer
     parser_classes = [MultiPartParser]
-    permission_classes = [ DjangoModelPermissions]
+    permission_classes = [ IsAuthenticated ,IsMMRDA]
     queryset = Air.objects.all()
 
     def post(self , request):
@@ -108,33 +108,11 @@ class NoiseListView(generics.ListAPIView):
 
 
 class envMonitoringView(generics.ListAPIView):
-    permission_classes = [AllowAny]
-    serializer_class = AirSerializer
-    queryset = Air.objects.all()
+    pass
+   
 
-    def get(self , request):
-        # env = EnvQualityMonitoring.objects.prefetch_related('airs').get(id = 2)
-        # data = env.airs.all()
-        # print(data)      
-        # serializer_context = {
-        #     'request': request,}
-        air = Air.objects.all()
-        airSerialzier = AirSerializer(self.get_queryset() , many = True).data
-
-        Water = water.objects.all()
-        WaterSerializer = waterviewserializer(Water , many = True).data
-
-        noise = Noise.objects.all()
-        NoiseSerializer = Noiseviewserializer(noise , many = True).data
-
-        tree = TreeManagment.objects.all()
-        treeSeralizer = TreeManagementSerailizer(tree , many = True).data
-
-
-
-
-        return Response ({'air' :airSerialzier , 'tree' : treeSeralizer , 'water' :WaterSerializer , 
-                        'Noise': NoiseSerializer} , status = status.HTTP_200_OK)
+class EnvqualityMonitoringView(generics.ListAPIView):
+    pass
 
 class TreeManagementView(generics.GenericAPIView):
     serializer_class = TreeManagementSerailizer
@@ -144,17 +122,16 @@ class TreeManagementView(generics.GenericAPIView):
     permission_classes = (DjangoModelPermissions , )
 
     def post(self , request):
-        try:
-            lat=float(request.data['latitude'])
-            long=float(request.data['longitude'])
-            location=Point(long,lat,srid=4326)
-            serializer = self.get_serializer_class(data = request.data)
-            if serializer.is_valid(raise_exception=True):
-                tree = serializer.save(location = location)
-                data = TreeManagmentviewserializer(tree).data 
-                return Response(data , status = status.HTTP_200_OK)
-        except: 
-            return Response({'msg' : 'Please enter a valid data'} , status = status.HTTP_400_BAD_REQUEST)
+        lat=float(request.data['latitude'])
+        long=float(request.data['longitude'])
+        location=Point(long,lat,srid=4326)
+        serializer = TreeManagementSerailizer(data = request.data)
+        if serializer.is_valid(raise_exception=True):
+            tree = serializer.save(location = location)
+            data = TreeManagmentviewserializer(tree).data 
+            return Response(data , status = status.HTTP_200_OK)
+        else:
+            return Response({'message': serializer.errors} , status = status.HTTP_400_BAD_REQUEST)
 
 class TereeManagementView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
@@ -164,20 +141,17 @@ class TereeManagementView(generics.ListAPIView):
     queryset = TreeManagment.objects.all()
 
 
-
 class WasteTreatmentsView(generics.GenericAPIView):
     serializer_class = WasteTreatmentsSerializer
     renderer_classes = [ErrorRenderer]
     parser_classes = [MultiPartParser]
     # permission_classes = [ mmrdaPermissions , ]
     
-
     def post(self , request):
         try:
             lat=float(request.data['latitude'])
             long=float(request.data['longitude'])
             location=Point(long,lat,srid=4326)
-            print(request.user.groups)
             serializer = WasteTreatmentsSerializer(data = request.data)
             if serializer.is_valid(raise_exception= True):
                 waste = serializer.save(location =location)

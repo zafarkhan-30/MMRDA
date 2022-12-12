@@ -25,23 +25,14 @@ class Baseclass(models.Model):
         abstract = True
 
 
-class social_Monitoring(models.Model):
-    sm_id = models.ForeignKey(
-        User, related_name='social_monitoring', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.sm_id.email
-
-
-def create_data(sender, instance, **kwargs):
-    if kwargs['created']:
-        created = social_Monitoring.objects.create(sm_id=instance)
-post_save.connect(create_data, sender=User)
 
 
 class PAP(Baseclass):
-    pap_id = models.ForeignKey(
-        social_Monitoring, related_name='PAPs', on_delete=models.CASCADE)
+    # pap_id = models.ForeignKey(
+    #     social_Monitoring, related_name='PAPs', on_delete=models.CASCADE)
+    # quarter = None
+    # package = None
+    # date    = None
     date_of_notification = models.DateTimeField(
         auto_now_add=True, null=True, blank=True)
     actions = [('Agreed for rehabilation', 'Agreed for rehabilation'),
@@ -71,12 +62,10 @@ class PAP(Baseclass):
     legal_status = models.CharField(
         max_length=255, choices=status, null=True, blank=True)
 
-    def __str__(self) -> str:
-        return self.pap_id.sm_id.email
 
- # Agreed For rehabilation
+# Agreed For rehabilation
 class Rehabilation(models.Model):
-    rehabilation_id = models.OneToOneField(
+    PAP_id = models.OneToOneField(
         PAP, related_name='rehabilation', on_delete=models.CASCADE)
     shifting_allowance = models.BooleanField(blank =True)
     livelihood_support = models.CharField(
@@ -88,14 +77,12 @@ class Rehabilation(models.Model):
     Community_engagement = models.CharField(
         max_length=255, null=True, blank=True)
 
-    def __str__(self) -> str:
-        return self.rehabilation_id.pap_id.sm_id.email
-
+    
 # Compensation Offered Type
 
 
 class Compensation(models.Model):
-    Compensation_id = models.OneToOneField(
+    PAP_id = models.OneToOneField(
         PAP, related_name="Compensation", on_delete=models.CASCADE)
     Alternate_accommodation_or_Commercial_Unit = models.FileField(
         null=True, blank=True)
@@ -103,30 +90,34 @@ class Compensation(models.Model):
     land_provided_area = models.CharField(
         max_length=255, null=True, blank=True)
 
-    def __str__(self) -> str:
-        return self.Compensation_id.pap_id.sm_id.email
-
 
 # Labour  Camp Model ----------------------------------------------
 
 class LabourCamp(Baseclass):
-    camp_id = models.ForeignKey(
-        social_Monitoring, related_name='labour_camp', on_delete=models.CASCADE)
-    # transport_facility = models.BooleanField(blank=True)
-
-    def __str__(self):
-        return self.camp_id.sm_id.email
+    transport_facility = models.BooleanField(blank=True, null = True)
 
 
-def create_data(sender, instance, **kwargs):
-    if kwargs['created']:
-        created = LabourCamp.objects.create(camp_id=instance)
-post_save.connect(create_data, sender=social_Monitoring)
+
+#     camp_id = models.ForeignKey(
+#         social_Monitoring, related_name='labour_camp', on_delete=models.CASCADE)
+#     # transport_facility = models.BooleanField(blank=True)
+
+#     def __str__(self):
+#         return self.camp_id.sm_id.email
+
+
+# def create_data(sender, instance, **kwargs):
+#     if kwargs['created']:
+#         created = LabourCamp.objects.create(camp_id=instance)
+# post_save.connect(create_data, sender=social_Monitoring)
 
 
 class ConstructionSiteDetails(Baseclass):
-    construction_id = models.ForeignKey(
+    labourCamp_id = models.ForeignKey(
         LabourCamp, related_name='constructioncamp', on_delete=models.CASCADE)
+    quarter = None
+    package = None
+    date    = None
     site_photographs = models.ImageField(null=True, blank=True)
     demarking_of_pathways = models.BooleanField(blank = True)
     signAges_or_labeling = models.BooleanField(blank= True )
@@ -136,13 +127,18 @@ class ConstructionSiteDetails(Baseclass):
     Drinking_water = models.BooleanField(blank =True)
     Toilet_facility = models.BooleanField( blank =True)
 
-    def __str__(self):
-        return self.construction_id.camp_id.sm_id.email
+    
+
+
+    
 
 
 class LabourCampDetails(Baseclass):
     labourcamp_id = models.ForeignKey(
         LabourCamp, related_name='labourcampdetails', on_delete=models.CASCADE )
+    quarter = None
+    package = None
+    date = None
     toilets = models.BooleanField(blank =True)
     Drinking_water = models.BooleanField(blank =True)
     demarking_of_pathways = models.BooleanField(blank =True)
@@ -155,5 +151,4 @@ class LabourCampDetails(Baseclass):
     segregation_of_waste = models.BooleanField(blank =True)
     rooms_or_doms = models.CharField(max_length=255, null=True, blank=True)
 
-    def __str__(self):
-        return self.labourcamp_id.camp_id.sm_id.email
+
