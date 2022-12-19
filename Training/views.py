@@ -3,7 +3,7 @@ from .serialzers import TraningSerializer, photographsSerializer, photographsVie
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
-from django.contrib.gis.geos import Point, GEOSGeometry
+from django.contrib.gis.geos import Point
 from .models import traning, photographs
 from .permission import IsConsultant
 
